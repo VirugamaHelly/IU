@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
   return (
@@ -15,7 +15,7 @@ const LoginForm = () => {
         {/* FORM starts here */}
         <form onSubmit={(e) => e.preventDefault()}>
           {/* Label */}
-          <label className="block text-sm text-gray-700 mb-1 dark:text-gray-300" htmlFor="email">
+          <label className="block text-sm text-gray-700 mb-1 dark:text-gray-300 " htmlFor="email">
             Email or Phone
           </label>
 
@@ -24,17 +24,17 @@ const LoginForm = () => {
             id="email"
             type="text"
             placeholder="john.doe@example.com or +1234567890"
-            className="w-full px-4 py-2 border border-gray-300 dark:bg-black dark:border-gray-800 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-2 border dark:text-white border-gray-300 dark:bg-black dark:border-gray-800 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
             required
           />
 
           {/* Button */}
-          <button
+          <Link to='/otpverification'
             type="submit"
             className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
           >
             Sign in with OTP
-          </button>
+          </Link>
         </form>
 
         {/* Sign up link */}
