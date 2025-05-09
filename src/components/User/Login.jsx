@@ -1,91 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import React from 'react';
 
-const OTPVerification = () => {
-  const [timer, setTimer] = useState(30);
-  const [showResend, setShowResend] = useState(false);
-  const [otp, setOtp] = useState(new Array(6).fill(""));
-
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      setTimer(prev => {
-        if (prev === 1) {
-          clearInterval(countdown);
-          setShowResend(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(countdown);
-  }, []);
-
-  const handleChange = (e, index) => {
-    const value = e.target.value;
-    if (/^\d?$/.test(value)) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-
-      if (value && index < 5) {
-        document.getElementById(`otp-${index + 1}`).focus();
-      }
-    }
-  };
-
-  const handleResend = () => {
-    // Trigger resend OTP logic here
-    setTimer(30);
-    setShowResend(false);
-  };
-
+const LoginForm = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-md text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">Verify Your Login</h2>
-        <p className="text-sm text-gray-500 mb-6">
-          Enter the 6-digit code sent to <span className="font-semibold">dd@test.com</span>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md dark:bg-black">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-2 dark:text-white">
+          Sign in to GreenGlide
+                  </h2>
+        <p className="text-center text-gray-500 text-sm mb-6 dark:text-gray-400">
+          Enter your email or phone to receive an OTP
         </p>
 
-        {/* OTP Inputs */}
-        <div className="flex justify-between space-x-2 mb-4">
-          {otp.map((digit, idx) => (
-            <input
-              key={idx}
-              id={`otp-${idx}`}
-              type="text"
-              maxLength="1"
-              value={digit}
-              onChange={(e) => handleChange(e, idx)}
-              className="w-10 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          ))}
-        </div>
+        {/* FORM starts here */}
+        <form onSubmit={(e) => e.preventDefault()}>
+          {/* Label */}
+          <label className="block text-sm text-gray-700 mb-1 dark:text-gray-300" htmlFor="email">
+            Email or Phone
+          </label>
 
-        {/* Resend Section */}
-        {!showResend ? (
-          <p className="text-sm text-gray-500 mb-4">
-            Resend code in {timer} second{timer !== 1 ? 's' : ''}
-          </p>
-        ) : (
+          {/* Input */}
+          <input
+            id="email"
+            type="text"
+            placeholder="john.doe@example.com or +1234567890"
+            className="w-full px-4 py-2 border border-gray-300 dark:bg-black dark:border-gray-800 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+
+          {/* Button */}
           <button
-            onClick={handleResend}
-            className="text-green-600 font-medium text-sm mb-4 hover:underline"
+            type="submit"
+            className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
           >
-            Resend OTP
+            Sign in with OTP
           </button>
-        )}
+        </form>
 
-        {/* Buttons */}
-        <button className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md mb-2 transition">
-          Verify & Continue
-        </button>
-        <button className="w-full border text-gray-600 py-2 rounded-md hover:bg-green-600 transition">
-          Go Back
-        </button>
+        {/* Sign up link */}
+        <p className="text-center text-sm text-gray-600 mt-4">
+          Don’t have an account?{' '}
+          <Link to="/signup" className="text-green-600 font-semibold cursor-pointer">
+            Sign up now →
+          </Link>
+        </p>
       </div>
     </div>
   );
 };
 
-export default OTPVerification;
+export default LoginForm;
