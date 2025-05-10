@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -22,7 +24,27 @@ const LoginForm = () => {
     }
 
     setError("");
-    navigate("/otpverification", { state: { email } });
+    setLoading(true);
+
+    try {
+      const response = await axios.post("https://idharudhar-backend.onrender.com/api/auth/login", {
+        email,
+      });
+
+      if (response.status === 200) {
+        navigate("/otpverification", { state: { email } });
+      } else {
+        setError(response.data.message || "Login failed. Try again.");
+      }
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,9 +76,10 @@ const LoginForm = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition text-center"
           >
-            Sign in with OTP
+            {loading ? "Sending OTP..." : "Sign in with OTP"}
           </button>
         </form>
 
