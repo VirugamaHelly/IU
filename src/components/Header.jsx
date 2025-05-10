@@ -260,19 +260,17 @@ const Header = () => {
                 <Globe size={20} />
               </button>
               {/*dark:border-gray-700 hover:border-[#0F5729] hover:bg-[#0F5729] hover:text-white bg-white text-black border-gray-300 dark:text-white */}
-              <a
-                href="#"
-                className="bg-white  dark:bg-[#0F141B] dark:hover:bg-[#0F5729] dark:text-white font-medium px-4 py-2 rounded-md transition-colors border border-gray dark:border-gray-700 hover:border-[#0F5729] hover:bg-[#0F5729] hover:text-white"
-                style={{ borderWidth: '1px' }}
+              <Link to={"/login"}
+                className="text-black dark:text-white font-medium px-4 py-2 rounded-md border-gray-300 transition-colors"
               >
                 Login
-              </a>
-              <a
-                href="#"
-                className="bg-green-500 text-white font-medium px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+              </Link>
+
+              <Link to='/signup'
+                className="w-full bg-green-500 text-white font-medium px-4 py-2 rounded-md text-center hover:bg-green-600 transition-colors"
               >
                 Sign Up
-              </a>
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -401,17 +399,17 @@ const Header = () => {
 
 
             <div className="flex flex-col space-y-3 mt-4">
-              <a href="#"
+              <Link to={"/login"}
                 className="text-black dark:text-white font-medium px-4 py-2 rounded-md border-gray-300 transition-colors"
               >
                 Login
-              </a>
+              </Link>
 
-              <a href="#"
+              <Link to='/signup'
                 className="w-full bg-green-500 text-white font-medium px-4 py-2 rounded-md text-center hover:bg-green-600 transition-colors"
               >
                 Sign Up
-              </a>
+              </Link>
             </div>
           </nav>
         </div>
@@ -423,3 +421,4 @@ const Header = () => {
 };
 
 export default Header;
+
