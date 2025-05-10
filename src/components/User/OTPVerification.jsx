@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const OTPVerification = () => {
   const [timer, setTimer] = useState(30);
   const [showResend, setShowResend] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const email = location.state?.email || "";
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -21,8 +27,6 @@ const OTPVerification = () => {
 
     return () => clearInterval(countdown);
   }, []);
-  const location = useLocation();
-  const email = location.state?.email || "your email";
 
   const handleChange = (e, index) => {
     const value = e.target.value;
@@ -37,10 +41,46 @@ const OTPVerification = () => {
     }
   };
 
-  const handleResend = () => {
-    // Trigger resend OTP logic here
-    setTimer(30);
-    setShowResend(false);
+  const handleResend = async () => {
+    try {
+      await axios.post("https://idharudhar-backend-1.onrender.com/api/auth/send-otp", { email });
+      setTimer(30);
+      setShowResend(false);
+    } catch (err) {
+      console.error("Resend OTP error:", err);
+    }
+  };
+
+  const handleVerify = async () => {
+    const enteredOtp = otp.join("");
+
+    if (enteredOtp.length !== 6) {
+      setError("Please enter the complete 6-digit OTP.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await axios.post("https://idharudhar-backend.onrender.com/api/auth/verify-otp", {
+        email,
+        otp: enteredOtp
+      });
+
+      if (response.status === 200) {
+        // Successfully verified
+        navigate("/"); // or to a protected route
+      } else {
+        setError(response.data.message || "Invalid OTP.");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to verify OTP. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,6 +106,9 @@ const OTPVerification = () => {
           ))}
         </div>
 
+        {/* Error */}
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
         {/* Resend Section */}
         {!showResend ? (
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -81,14 +124,19 @@ const OTPVerification = () => {
         )}
 
         {/* Buttons */}
-       <Link to="/">
-        <button className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md mb-2 transition">
-          Verify & Continue
+        <button
+          onClick={handleVerify}
+          disabled={loading}
+          className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md mb-2 transition"
+        >
+          {loading ? "Verifying..." : "Verify & Continue"}
         </button>
-       </Link>
-        <Link to='/Login'><button className="w-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          Go Back
-        </button></Link>
+
+        <Link to="/login">
+          <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+            Go Back
+          </button>
+        </Link>
       </div>
     </div>
   );
