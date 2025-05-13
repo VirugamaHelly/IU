@@ -49,14 +49,14 @@ const SignUp = () => {
         }
 
         try {
-            const response = await axios.post('https://idharudhar-backend-1.onrender.com/api/auth/signup', {
+            const response = await axios.post('https://idharudhar-backend-2.onrender.com/api/auth/signup', {
                 name: fullName,
                 email,
                 phone,
                 password,
                 confirmPassword,
             });
-            await axios.post('https://idharudhar-backend-1.onrender.com/api/auth/send-otp', { email });
+            await axios.post('https://idharudhar-backend-2.onrender.com/api/auth/send-otp', { email });
 
             alert("Signup successful! OTP sent to your email.");
 
