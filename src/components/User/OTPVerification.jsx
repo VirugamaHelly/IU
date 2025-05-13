@@ -43,7 +43,7 @@ const OTPVerification = () => {
 
   const handleResend = async () => {
     try {
-      await axios.post("https://idharudhar-backend-1.onrender.com/api/auth/send-otp", { email });
+      await axios.post("https://idharudhar-backend-2.onrender.com/api/auth/send-otp", { email });
       setTimer(30);
       setShowResend(false);
     } catch (err) {
@@ -63,7 +63,7 @@ const OTPVerification = () => {
     setError("");
 
     try {
-      const response = await axios.post("https://idharudhar-backend-1.onrender.com/api/auth/verify-otp", {
+      const response = await axios.post("https://idharudhar-backend-2.onrender.com/api/auth/verify-otp", {
         email,
         otp: enteredOtp
       });
