@@ -63,7 +63,7 @@ const OTPVerification = () => {
     setError("");
 
     try {
-      const response = await axios.post("https://idharudhar-backend.onrender.com/api/auth/verify-otp", {
+      const response = await axios.post("https://idharudhar-backend-1.onrender.com/api/auth/verify-otp", {
         email,
         otp: enteredOtp
       });
