@@ -27,7 +27,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://idharudhar-backend-1.onrender.com/api/auth/login", {
+      const response = await axios.post("https://idharudhar-backend-2.onrender.com/api/auth/login", {
         email,
       });
 
