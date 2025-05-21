@@ -1,58 +1,62 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+"use client"
+
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
+import axios from "axios"
+import { useAuth } from "../../contexts/AuthContext"
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const [email, setEmail] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
     if (!email.trim()) {
-      setError("Email or phone is required");
-      return;
+      setError("Email or phone is required")
+      return
     }
     if (!emailRegex.test(email)) {
-      setError("Enter a valid email");
-      return;
+      setError("Enter a valid email")
+      return
     }
 
-    setError("");
-    setLoading(true);
+    setError("")
+    setLoading(true)
 
     try {
       const response = await axios.post("https://idharudhar-backend-2.onrender.com/api/auth/login", {
         email,
-      });
+      })
 
       if (response.status === 200) {
-        navigate("/otpverification", { state: { email } });
+        // For demo purposes, we'll simulate a successful login
+        // In a real app, you'd verify the OTP first
+        navigate("/otpverification", { state: { email } })
       } else {
-        setError(response.data.message || "Login failed. Try again.");
+        setError(response.data.message || "Login failed. Try again.")
       }
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
+        setError(err.response.data.message)
       } else {
-        setError("Something went wrong. Please try again later.");
+        setError("Something went wrong. Please try again later.")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md dark:bg-black">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-2 dark:text-white">
-          Sign in to GreenGlide
-        </h2>
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md dark:bg-[#0F141B]">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-2 dark:text-white">Sign in to GreenGlide</h2>
         <p className="text-center text-gray-500 text-sm mb-6 dark:text-gray-400">
           Enter your email or phone to receive an OTP
         </p>
@@ -66,8 +70,9 @@ const LoginForm = () => {
             id="email"
             type="text"
             placeholder="john.doe@example.com or +1234567890"
-            className={`w-full px-4 py-2 border ${error ? 'border-red-500' : 'border-gray-400'
-              } dark:text-white dark:bg-black dark:border-gray-700 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-500`}
+            className={`w-full px-4 py-2 border ${
+              error ? "border-red-500" : "border-gray-400"
+            } dark:text-white dark:bg-black dark:border-gray-700 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-500`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -84,14 +89,14 @@ const LoginForm = () => {
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-4">
-          Don’t have an account?{' '}
+          Don't have an account?{" "}
           <Link to="/signup" className="text-green-600 font-semibold cursor-pointer">
             Sign up now →
           </Link>
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm
